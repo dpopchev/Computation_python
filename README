@@ -1,0 +1,25 @@
+# python computation
+
+Repository to learn numpy, scipy and sympy
+
+## current status
+
+- single_pendulm.py is code to develop sympy was of investigating stability of
+non-linear system of ODEs around fixed points;
+
+- for now it finds the fixed points, computes the Jacobian and can apply Hurwatz
+criteria on the characteristics polynomial to figure out if the point is stable
+or not
+
+- todo is develop methods for testing Lypunov function candidates as explained
+
+- resources
+    - [resource 1](https://stanford.edu/class/ee363/lectures/lq-lyap.pdf)
+    - [resource 2](https://www.egr.msu.edu/~khalil/NonlinearSystems/Sample/Lect_9.pdf)
+    - [resource 3](https://www.math24.net/method-lyapunov-functions/)
+    - [resource 4](https://math.libretexts.org/Bookshelves/Differential_Equations/Book%3A_Ordinary_Differential_Equations_(Wiggins)/7%3A_Lyapunov%E2%80%99s_Method_and_the_LaSalle_Invariance_Principle/7.1%3A_Lyapunov%E2%80%99s_Method_and_the_LaSalle_Invariance_Principle)
+    - [resource 5](https://www.egr.msu.edu/~khalil/NonlinearSystems/Sample/Lect_10.pdf)
+    - [resource 6](https://en.wikipedia.org/wiki/LaSalle%27s_invariance_principle)
+    - [resource 7](https://numpy.org/doc/stable/reference/generated/numpy.identity.html?highlight=identity#numpy.identity)
+    - [resource 8](http://www.cds.caltech.edu/archive/help/uploads/wiki/files/237/Lecture2_notes_CDS270.pdf)
+    - [resource 9](https://www.iasj.net/iasj?func=fulltext&aId=37704)
