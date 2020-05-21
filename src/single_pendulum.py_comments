@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+
+import pdb
+
+import numpy as np
+import sympy as sy
+import matplotlib.pyplot as plt
+
+# independent variable
+t = sy.symbols('t')
+
+# dependent variables
+theta, omega = sy.symbols(r'\theta, \omega')
+Y = theta, omega
+
+# free parameters of the system
+g, L = sy.symbols('g, L')
+
+# symbolic rhs for single pendulum ode
+theta_dt = omega
+omega_dt = -(g/L)*sy.sin(theta)
+rhs_expr = sy.Matrix([theta_dt, omega_dt])
+
+# create numpy compatible function of the rhs
+rhs = sy.lambdify((t, Y, g, L), rhs_expr, 'numpy')
+
+# calculate the Jacobian matrix of the ode system
+J_expr = rhs_expr.jacobian(Y)
+
+# create numpy compatible function to calculate the Jacobian of the rhs
+J = sy.lambdify((t, Y, g, L), J_expr)
+
+# find the critical points of the ode
+sol = sy.solve(rhs_expr, (theta, omega))
+print(sol)
+
+
+
+#def ode_single_pendulum(t, y, g, L):
+#
+#    theta, omega = y
+#
+#    theta_dt = omega
+#    omega_dt = -(g/L)*np.sin(theta)
+#
+#    return np.array([theta_dt,omega_dt])
+#
+#def get_Jacobian():
+#    """ using the sympy package create an Jacobian function """
+#
+#    def _ode_single_pendulum(t, y, g, L):
+#        """ copy of the ode function, but with substituted numpy functions with
+#        their sympy conterpart
+#        """
+#
+#        theta, omega = y
+#
+#        theta_dt = omega
+#        omega_dt = -(g/L)*sy.sin(theta)
+#
+#        return np.array([theta_dt,omega_dt])
+#
+#    t, theta, omega, g, L = sy.symbols(r't, \theta, \omega, g, L')
+#    y = theta, omega
+#
+#    J = sy.Matrix(_ode_single_pendulum(t, y, g, L)).jacobian(y)
+#
+#    return sy.lambdify((t,y,g,L),J.det())
+#
+#def plot_phase_portrait(ax, ode_rhs, parameters, args=(), n_points=25):
+#
+#    parameters_linspace = {
+#            _: np.linspace(parameters[_]['init'], parameters[_]['finl'], n_points)
+#            for _ in parameters.keys() if parameters[_]['init']
+#            }
+#
+#    theta_grid, omega_grid = np.meshgrid(
+#            parameters_linspace['theta'],
+#            parameters_linspace['omega']
+#            )
+#
+#    theta_rhs, omega_rhs = ode_rhs(None, (theta_grid,omega_grid), *args)
+#
+#    # compute the vector norms
+#    # and make the line width proportional to them,
+#    # i.e. the greater the vector length, the thicker the line
+#    vector_norms = np.sqrt( theta_rhs**2 + omega_rhs**2 )
+#    lw = 0.25 + 3*vector_norms/vector_norms.max()
+#
+#    ax.streamplot(
+#            theta_grid, omega_grid, theta_rhs, omega_rhs,
+#            linewidth = lw,
+#            arrowsize = 1.2,
+#            density = 1
+#            )
+#
+#    return ax
+#
+#def init_parameteres():
+#
+#    # independent variable
+#    t = sy.symbols('t')
+#
+#    # dependent variables and corresponding vector
+#    theta, omega = sy.symbols(r'\theta, \omega')
+#    Y = theta, omega
+#
+#    # free parameters of the system
+#    g, L = sy.symbols('g, L')
+#
+#    parameters = {}
+#
+#    parameters.update({
+#        't': {
+#            'descr'     : 'independent variable',
+#            'label'    : 't',
+#            'init'      : None,
+#            'finl'      : None,
+#            }
+#        })
+#
+#    parameters.update({
+#        'theta': {
+#            'descr'     : 'angular displacement in rad',
+#            'label'    : r'$\theta$',
+#            'init'      : -2*np.pi,
+#            'finl'      : 2*np.pi,
+#            }
+#        })
+#
+#    parameters.update({
+#        'omega': {
+#            'descr'     : 'angular velocity in rad/s',
+#            'label'    : r'$\omega$',
+#            'init'      : -np.pi,
+#            'finl'      : np.pi,
+#            }
+#        })
+#
+#    return parameters
+#
+#def plot_main(parameters, J):
+#
+#    fig, axs  = plt.subplots(
+#            3,3,
+#            sharex = 'col',
+#            sharey = 'row',
+#            gridspec_kw = {
+#                'hspace': 0,
+#                'wspace': 0
+#                }
+#            )
+#
+#    g = [1, 5, 10]
+#    L = [1, 5, 10]
+#
+#    for i_g, _g in enumerate(g):
+#        for i_L, _L in enumerate(L):
+#            ax = axs[i_L][i_g]
+#
+#            ax = plot_phase_portrait(
+#                    ax,
+#                    ode_single_pendulum,
+#                    parameters,
+#                    args=(_g, _L)
+#                    )
+#            if i_L == len(L) - 1:
+#                ax.set_xlabel(parameters['theta']['label'])
+#
+#            if i_g == 0:
+#                ax.set_ylabel(parameters['omega']['label'])
+#
+#            ax.plot([
+#
+#
+#    fig.text(0.5, 0.02, r'$g: 1 \qquad \longrightarrow \qquad 10$', ha='center', fontsize=15)
+#    fig.text(0.04, 0.5, r'$10 \qquad \longleftarrow \qquad 1 :L$', va='center', rotation='vertical', fontsize=15)
+#    plt.show()
+#
+#    return 0
+#
+#if __name__ == '__main__':
+#
+#    parameters = init_parameteres()
+#
+#    J = get_Jacobian()
